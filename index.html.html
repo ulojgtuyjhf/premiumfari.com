@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>premiumfari</title>
+    <link rel="icon" href="https://example.com/path-to-your-favicon.jpg" type="image/jpeg">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            background-color: rgb(82, 22, 221);
+            color: black;
+            position: relative;
+        }
+        body.dark-mode {
+            background-color: black;
+            color: white;
+        }
+        body:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 100%);
+            background-size: 50px 50px;
+            animation: animated-lines 2s linear infinite;
+            pointer-events: none;
+        }
+        @keyframes animated-lines {
+            0% {
+                background-position: 0 0;
+            }
+            100% {
+                background-position: 50px 50px;
+            }
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            position: relative;
+            z-index: 1;
+        }
+        nav {
+            display: flex;
+            gap: 20px;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+            position: relative;
+            display: inline-block;
+        }
+        nav a:after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            transform: scaleX(0);
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: white;
+            transform-origin: bottom right;
+            transition: transform 0.25s ease-out;
+        }
+        nav a:hover:after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+        .toggle-btn {
+            width: 30px;
+            height: 30px;
+            background-color: #222;
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.3s ease;
+            z-index: 1;
+        }
+        main {
+            padding: 20px;
+            z-index: 1;
+            position: relative;
+        }
+        .section {
+            display: none;
+            margin-bottom: 50px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+        .section.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .search-bar {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .search-bar input {
+            width: 300px;
+            padding: 10px;
+            border: 2px solid #007bff;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            width: 100%;
+        }
+        .box {
+            background-color: white;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out, background-color 0.3s ease;
+            user-select: none;
+            z-index: 1;
+        }
+        .box:hover {
+            transform: scale(1.05);
+            background-color: #f8f9fa;
+        }
+        .box img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+        .box p {
+            margin: 10px 0;
+            font-size: 14px;
+            color: #333;
+            pointer-events: none;
+        }
+        .box button {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .box button:hover {
+            background-color: #0056b3;
+        }
+        .box iframe {
+            width: 100%;
+            height: 200px;
+            border: none;
+            pointer-events: none;
+            display: none;
+        }
+        .box a {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+        }
+        .footer {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+        .footer .social-icons {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        .footer .social-icons li {
+            display: inline;
+            margin: 0 10px;
+        }
+        .footer .social-icons a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 24px;
+        }
+        .footer .social-icons a:hover {
+            color: #ffcc00;
+        }
+        .footer .links {
+            margin: 20px 0;
+        }
+        .footer .links a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        .footer .links a:hover {
+            text-decoration: underline;
+        }
+        .footer .copyright {
+            margin-top: 10px;
+        }
+
+        .uncopiable {
+            -webkit-touch-callout: none; /* iOS Safari */
+            -webkit-user-select: none; /* Safari */
+            -khtml-user-select: none; /* Konqueror HTML */
+            -moz-user-select: none; /* Firefox */
+            -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <nav>
+            <a onclick="showSection('affiliate')">Shop</a>
+            <a onclick="showSection('pdf-Viewer')">PDF </a>
+            <a onclick="showSection('courses-section')">Courses</a>
+            <a onclick="showSection('music-section')">Best Music</a>
+        </nav>
+        <button class="toggle-btn" onclick="toggleBackground()">☾</button>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Affiliate Selling Section -->
+        <section id="affiliate" class="section active uncopiable">
+            <h1>Shop</h1>
+            <div class="container">
+                <!-- 16 boxes for Affiliate Selling -->
+                <div class="box">
+                    <img src="https://www.apple.com/newsroom/images/product/watch/standard/Apple_watch-series7_hero_09142021_big.jpg.slideshow-medium.jpg" alt="Affiliate Product 1">
+                    <p style="margin-bottom: 100px;">Product 1 very nic productt perfact for hair care full description on amazon</p>
+                    <p style="margin-bottom: 65px;">R598</p>
+                    <button style="margin-top: 20px;" onclick="window.location.href='https://tailblocks.cc/';">Buy Now on amazon</button>
+                </div>
+                <div class="box">
+                    <img src="https://www.apple.com/newsroom/images/product/watch/standard/Apple_watch-series7_hero_09142021_big.jpg.slideshow-medium.jpg" alt="Affiliate Product 2">
+                    <p style="margin-bottom: 100px;">Product 2 Description</p>
+                    <button style="margin-top: 20px;" onclick="window.location.href='https://tailblocks.cc/';">Buy Now</button>
+                </div>
+                <!-- Add more boxes as needed -->
+                <div class="box">
+                    <img src="https://www.apple.com/newsroom/images/product/watch/standard/Apple_watch-series7_hero_09142021_big.jpg.slideshow-medium.jpg" alt="Affiliate Product 3">
+                    <p style="margin-bottom: 100px;">Product 3 Description</p>
+                    <button style="margin-top: 20px;" onclick="window.location.href='https://tailblocks.cc/';">Buy Now</button>
+                </div>
+                <div class="box">
+                    <img src="https://www.apple.com/newsroom/images/product/watch/standard/Apple_watch-series7_hero_09142021_big.jpg.slideshow-medium.jpg" alt="Affiliate Product 4">
+                    <p style="margin-bottom: 100px;">Product 4 Description</p>
+                    <button style="margin-top: 20px;" onclick="window.location.href='https://tailblocks.cc/';">Buy Now</button>
+                </div>
+                <div class="box">
+                    <img src="https://www.apple.com/newsroom/images/product/watch/standard/Apple_watch-series7_hero_09142021_big.jpg.slideshow-medium.jpg" alt="Affiliate Product 5">
+                    <p style="margin-bottom: 100px;">Product 5 Description</p>
+                    <button style="margin-top: 20px;" onclick="window.location.href='https://tailblocks.cc/';">Buy Now</button>
+                </div>
+                <div class="box">
+                    <img src="https://www.apple.com/newsroom/images/product/watch/standard/Apple_watch-series7_hero_09142021_big.jpg.slideshow-medium.jpg" alt="Affiliate Product 6">
+                    <p style="margin-bottom: 100px;">Product 6 Description</p>
+                    <button style="margin-top: 20px;" onclick="window.location.href='https://tailblocks.cc/';">Buy Now</button>
+                </div>
+                <div class="box">
+                    <img src="https://www.apple.com/newsroom/images/product/watch/standard/Apple_watch-series7_hero_09142021_big.jpg.slideshow-medium.jpg" alt="Affiliate Product 7">
+                    <p style="margin-bottom: 100px;">Product 7 Description</p>
+                    <button style="margin-top: 20px;" onclick="window.location.href='https://tailblocks.cc/';">Buy Now</button>
+                </div>
+                <div class="box">
+                    <img src="https://www.apple.com/newsroom/images/product/watch/standard/Apple_watch-series7_hero_09142021_big.jpg.slideshow-medium.jpg" alt="Affiliate Product 8">
+                    <p style="margin-bottom: 100px;">Product 8 Description</p>
+                    <button style="margin-top: 20px;" onclick="window.location.href='https://tailblocks.cc/';">Buy Now</button>
+                </div>
+                <div class="box">
+                    <img src="https://www.apple.com/newsroom/images/product/watch/standard/Apple_watch-series7_hero_09142021_big.jpg.slideshow-medium.jpg" alt="Affiliate Product 9">
+                    <p style="margin-bottom: 100px;">Product 9 Description</p>
+                    <button style="margin-top: 20px;" onclick="window.location.href='https://tailblocks.cc/';">Buy Now</button>
+                </div>
+                <div class="box">
+                    <img src="https://www.apple.com/newsroom/images/product/watch/standard/Apple_watch-series7_hero_09142021_big.jpg.slideshow-medium.jpg" alt="Affiliate Product 10">
+                    <p style="margin-bottom: 100px;">Product 10 Description</p>
+                    <button style="margin-top: 20px;" onclick="window.location.href='https://tailblocks.cc/';">Buy Now</button>
+                </div>
+                <div class="box">
+                    <img src="https://www.apple.com/newsroom/images/product/watch/standard/Apple_watch-series7_hero_09142021_big.jpg.slideshow-medium.jpg" alt="Affiliate Product 11">
+                    <p style="margin-bottom: 100px;">Product 11 Description</p>
+                    <button style="margin-top: 20px;" onclick="window.location.href='https://tailblocks.cc/';">Buy Now</button>
+                </div>
+                <div class="box">
+                    <img src="https://www.apple.com/newsroom/images/product/watch/standard/Apple_watch-series7_hero_09142021_big.jpg.slideshow-medium.jpg" alt="Affiliate Product 12">
+                    <p style="margin-bottom: 100px;">Product 12 Description</p>
+                    <button style="margin-top: 20px;" onclick="window.location.href='https://tailblocks.cc/';">Buy Now</button>
+                </div>
+                <div class="box">
+                    <img src="https://www.apple.com/newsroom/images/product/watch/standard/Apple_watch-series7_hero_09142021_big.jpg.slideshow-medium.jpg" alt="Affiliate Product 13">
+                    <p style="margin-bottom: 100px;">Product 13 Description</p>
+                    <button style="margin-top: 20px;" onclick="window.location.href='https://tailblocks.cc/';">Buy Now</button>
+                </div>
+                <div class="box">
+                    <img src="https://www.apple.com/newsroom/images/product/watch/standard/Apple_watch-series7_hero_09142021_big.jpg.slideshow-medium.jpg" alt="Affiliate Product 14">
+                    <p style="margin-bottom: 100px;">Product 14 Description</p>
+                    <button style="margin-top: 20px;" onclick="window.location.href='https://tailblocks.cc/';">Buy Now</button>
+                </div>
+                <div class="box">
+                    <img src="https://www.apple.com/newsroom/images/product/watch/standard/Apple_watch-series7_hero_09142021_big.jpg.slideshow-medium.jpg" alt="Affiliate Product 15">
+                    <p style="margin-bottom: 100px;">Product 15 Description</p>
+                    <button style="margin-top: 20px;" onclick="window.location.href='https://tailblocks.cc/';">Buy Now</button>
+                </div>
+                <div class="box">
+                    <img src="https://www.apple.com/newsroom/images/product/watch/standard/Apple_watch-series7_hero_09142021_big.jpg.slideshow-medium.jpg" alt="Affiliate Product 16">
+                    <p style="margin-bottom: 100px;">Product 16 Description</p>
+                    <button style="margin-top: 20px;" onclick="window.location.href='https://tailblocks.cc/';">Buy Now</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- PDF Viewer Section -->
+        <section id="pdf-Viewer" class="section uncopiable">
+            <h1>best PDF</h1>
+            <div class="search-bar">
+                <input type="text" id="search-input" placeholder="Search PDFs..." onkeyup="searchPDFs()">
+            </div>
+            <div id="pdf-container" class="container">
+                <!-- Box 1 -->
+                <div class="box">
+                    <img src="https://www.pcworld.com/wp-content/uploads/2024/02/pdf-icon.jpg?quality=50&strip=all" alt="PDF Icon">
+                    <p style="margin-bottom: 100px;">Cyber Security doc</p>
+                    <button style="margin-bottom: 20px;" onclick="window.open('https://mrcet.com/pdf/Lab%20Manuals/IT/CYBER%20SECURITY%20(R18A0521).pdf', '_blank')">View PDF</button>
+                    <iframe src="https://mrcet.com/pdf/Lab%20Manuals/IT/CYBER%20SECURITY%20(R18A0521).pdf" width="100%" height="600px"></iframe>
+                </div>
+            
+                <!-- Box 2 -->
+                <div class="box">
+                    <img src="https://www.pcworld.com/wp-content/uploads/2024/02/pdf-icon.jpg?quality=50&strip=all" alt="PDF Icon">
+                    <p style="margin-bottom: 100px;">QMS doc</p>
+                    <button style="margin-bottom: 20px;" onclick="window.open('https://www.icao.int/NACC/Documents/Meetings/2016/AIMQMS/QMSFPLAIMQualityManagementSystemsGuide.pdf', '_blank')">View PDF</button>
+                    <iframe src="https://www.icao.int/NACC/Documents/Meetings/2016/AIMQMS/QMSFPLAIMQualityManagementSystemsGuide.pdf" width="100%" height="600px"></iframe>
+                </div>
+                
+                <!-- Box 3 -->
+                <div class="box">
+                    <img src="https://www.pcworld.com/wp-content/uploads/2024/02/pdf-icon.jpg?quality=50&strip=all" alt="PDF Icon">
+                    <p style="margin-bottom: 100px;">Accounting doc</p>
+                    <button style="margin-bottom: 20px;" onclick="window.open('https://wcedonline.westerncape.gov.za/documents/ExamPapers%26Memos/Mind%20the%20Gap/non%20languages/MTG%20Accounting%20ENG.pdf', '_blank')">View PDF</button>
+                    <iframe src="https://wcedonline.westerncape.gov.za/documents/ExamPapers%26Memos/Mind%20the%20Gap/non%20languages/MTG%20Accounting%20ENG.pdf" width="100%" height="600px"></iframe>
+                </div>
+                
+                <!-- Box 4 -->
+                <div class="box">
+                    <img src="https://www.pcworld.com/wp-content/uploads/2024/02/pdf-icon.jpg?quality=50&strip=all" alt="PDF Icon">
+                    <p style="margin-bottom: 100px;">grade 12 Accounting doc</p>
+                    <button style="margin-bottom: 20px;" onclick="window.open('https://viaafrika.com/wp-content/uploads/2019/07/Geography-12-sg.pdf', '_blank')">View PDF</button>
+                    <iframe src="https://viaafrika.com/wp-content/uploads/2019/07/Geography-12-sg.pdf" width="100%" height="600px"></iframe>
+                </div>
+                
+                <!-- Box 5 -->
+                <div class="box">
+                    <img src="https://www.pcworld.com/wp-content/uploads/2024/02/pdf-icon.jpg?quality=50&strip=all" alt="PDF Icon">
+                    <p style="margin-bottom: 100px;">Gr12_PhysicalSciences_ doc</p>
+                    <button style="margin-bottom: 20px;" onclick="window.open('https://www.siyavula.com/book-downloads/science/Gr12_PhysicalSciences_Teacher_Eng.pdf', '_blank')">View PDF</button>
+                    <iframe src="https://www.siyavula.com/book-downloads/science/Gr12_PhysicalSciences_Teacher_Eng.pdf" width="100%" height="600px"></iframe>
+                </div>
+                
+                <!-- Box 6 -->
+                <div class="box">
+                    <img src="https://www.pcworld.com/wp-content/uploads/2024/02/pdf-icon.jpg?quality=50&strip=all" alt="PDF Icon">
+                    <p style="margin-bottom: 100px;">Introduction To Freelancer doc </p>
+                    <button style="margin-bottom: 20px;" onclick="window.open('https://students.hud.ac.uk/media/assets/photo/enterprise/IntroductionToFreelancerSTUDENT.pdf', '_blank')">View PDF</button>
+                    <iframe src="https://students.hud.ac.uk/media/assets/photo/enterprise/IntroductionToFreelancerSTUDENT.pdf" width="100%" height="600px"></iframe>
+                </div>
+                
+                <!-- Box 7 -->
+                <div class="box">
+                    <img src="https://www.pcworld.com/wp-content/uploads/2024/02/pdf-icon.jpg?quality=50&strip=all" alt="PDF Icon">
+                    <p style="margin-bottom: 100px;">forex doc</p>
+                    <button style="margin-bottom: 20px;" onclick="window.open('https://traders4traders.com/wp-content/uploads/2018/02/FX-Insider.pdf', '_blank')">View PDF</button>
+                    <iframe src="https://traders4traders.com/wp-content/uploads/2018/02/FX-Insider.pdf" width="100%" height="600px"></iframe>
+                </div>
+                
+                <!-- Box 8 -->
+                <div class="box">
+                    <img src="https://media.licdn.com/dms/image/D4E12AQF1VYkG9UZE-A/article-cover_image-shrink_600_2000/0/1695115651643?e=2147483647&v=beta&t=1puAHvZZ7mOyB-cYykVTvZ79THia7NuFt4VrZtBvv58" alt="PDF Icon">
+                    <p style="margin-bottom: 100px;">(COMING SOON)</p>
+                    <button style="margin-bottom: 20px;" onclick="window.open('pdfs/document8.pdf', '_blank')">View PDF</button>
+                    <iframe src="pdfs/document8.pdf" width="100%" height="600px"></iframe>
+                </div>
+            
+                <!-- Box 9 -->
+                <div class="box">
+                    <img src="https://media.licdn.com/dms/image/D4E12AQF1VYkG9UZE-A/article-cover_image-shrink_600_2000/0/1695115651643?e=2147483647&v=beta&t=1puAHvZZ7mOyB-cYykVTvZ79THia7NuFt4VrZtBvv58" alt="PDF Icon">
+                    <p style="margin-bottom: 100px;">(COMING SOON)</p>
+                    <button style="margin-bottom: 20px;" onclick="window.open('pdfs/document9.pdf', '_blank')">View PDF</button>
+                    <iframe src="pdfs/document9.pdf" width="100%" height="600px"></iframe>
+                </div>
+            
+                <!-- Box 10 -->
+                <div class="box">
+                    <img src="https://media.licdn.com/dms/image/D4E12AQF1VYkG9UZE-A/article-cover_image-shrink_600_2000/0/1695115651643?e=2147483647&v=beta&t=1puAHvZZ7mOyB-cYykVTvZ79THia7NuFt4VrZtBvv58" alt="PDF Icon">
+                    <p style="margin-bottom: 100px;">(COMING SOON)</p>
+                    <button style="margin-bottom: 20px;" onclick="window.open('pdfs/document10.pdf', '_blank')">View PDF</button>
+                    <iframe src="pdfs/document10.pdf" width="100%" height="600px"></iframe>
+                </div>
+            
+                <!-- Box 11 -->
+                <div class="box">
+                    <img src="https://media.licdn.com/dms/image/D4E12AQF1VYkG9UZE-A/article-cover_image-shrink_600_2000/0/1695115651643?e=2147483647&v=beta&t=1puAHvZZ7mOyB-cYykVTvZ79THia7NuFt4VrZtBvv58" alt="PDF Icon">
+                    <p style="margin-bottom: 100px;">(COMING SOON)</p>
+                    <button style="margin-bottom: 20px;" onclick="window.open('pdfs/document11.pdf', '_blank')">View PDF</button>
+                    <iframe src="pdfs/document11.pdf" width="100%" height="600px"></iframe>
+                </div>
+            
+                <!-- Box 12 -->
+                <div class="box">
+                    <img src="https://media.licdn.com/dms/image/D4E12AQF1VYkG9UZE-A/article-cover_image-shrink_600_2000/0/1695115651643?e=2147483647&v=beta&t=1puAHvZZ7mOyB-cYykVTvZ79THia7NuFt4VrZtBvv58" alt="PDF Icon">
+                    <p style="margin-bottom: 100px;">(COMING SOON)</p>
+                    <button style="margin-bottom: 20px;" onclick="window.open('pdfs/document12.pdf', '_blank')">View PDF</button>
+                    <iframe src="pdfs/document12.pdf" width="100%" height="600px"></iframe>
+                </div>
+            
+                <!-- Box 13 -->
+                <div class="box">
+                    <img src="https://media.licdn.com/dms/image/D4E12AQF1VYkG9UZE-A/article-cover_image-shrink_600_2000/0/1695115651643?e=2147483647&v=beta&t=1puAHvZZ7mOyB-cYykVTvZ79THia7NuFt4VrZtBvv58" alt="PDF Icon">
+                    <p style="margin-bottom: 100px;">(COMING SOON)</p>
+                    <button style="margin-bottom: 20px;" onclick="window.open('pdfs/document13.pdf', '_blank')">View PDF</button>
+                    <iframe src="pdfs/document13.pdf" width="100%" height="600px"></iframe>
+                </div>
+            
+                <!-- Box 14 -->
+                <div class="box">
+                    <img src="https://media.licdn.com/dms/image/D4E12AQF1VYkG9UZE-A/article-cover_image-shrink_600_2000/0/1695115651643?e=2147483647&v=beta&t=1puAHvZZ7mOyB-cYykVTvZ79THia7NuFt4VrZtBvv58" alt="PDF Icon">
+                    <p style="margin-bottom: 100px;">(COMING SOON)</p>
+                    <button style="margin-bottom: 20px;" onclick="window.open('pdfs/document14.pdf', '_blank')">View PDF</button>
+                    <iframe src="pdfs/document14.pdf" width="100%" height="600px"></iframe>
+                </div>
+            
+                <!-- Box 15 -->
+                <div class="box">
+                    <img src="https://media.licdn.com/dms/image/D4E12AQF1VYkG9UZE-A/article-cover_image-shrink_600_2000/0/1695115651643?e=2147483647&v=beta&t=1puAHvZZ7mOyB-cYykVTvZ79THia7NuFt4VrZtBvv58" alt="PDF Icon">
+                    <p style="margin-bottom: 100px;">(COMING SOON)</p>
+                    <button style="margin-bottom: 20px;" onclick="window.open('pdfs/document15.pdf', '_blank')">View PDF</button>
+                    <iframe src="pdfs/document15.pdf" width="100%" height="600px"></iframe>
+                </div>
+            
+                <!-- Box 16 -->
+                <div class="box">
+                    <img src="https://media.licdn.com/dms/image/D4E12AQF1VYkG9UZE-A/article-cover_image-shrink_600_2000/0/1695115651643?e=2147483647&v=beta&t=1puAHvZZ7mOyB-cYykVTvZ79THia7NuFt4VrZtBvv58" alt="PDF Icon">
+                    <p style="margin-bottom: 100px;">(COMING SOON)</p>
+                    <button style="margin-bottom: 20px;" onclick="window.open('pdfs/document16.pdf', '_blank')">View PDF</button>
+                    <iframe src="pdfs/document16.pdf" width="100%" height="600px"></iframe>
+                </div>
+            </div>
+            
+        </section>
+
+        <!-- Courses Section -->
+        <section id="courses-section" class="section uncopiable">
+            <h1>best Courses</h1>
+            <div class="container">
+                <!-- 16 boxes for Courses -->
+                <div class="box">
+                    <img src="https://img.youtube.com/vi/MtRkxYeMa_Y/0.jpg" alt="YouTube Video Thumbnail" style="width: 100%; height: auto; cursor: pointer;" onclick="window.open('https://www.youtube.com/embed/MtRkxYeMa_Y', '_blank')">
+                    <p style="margin-bottom: 100px;">The Real Estate guide</p>
+                    <button style="margin-bottom: 20px;" onclick="window.open('https://www.youtube.com/embed/MtRkxYeMa_Y', '_blank')">take course</button>
+                    <iframe width="853" height="480" src="https://www.youtube.com/embed/MtRkxYeMa_Y" title="The ULTIMATE Guide to Getting Started in Real Estate" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                </div>
+                <div class="box">
+                    <img src="https://img.youtube.com/vi/hXSFdwIOfnE/0.jpg" alt="Cyber Security Full Course Thumbnail" style="width: 100%; height: auto; cursor: pointer;" onclick="window.open('https://www.youtube.com/embed/hXSFdwIOfnE', '_blank')">
+                    <p style="margin-bottom: 100px;">Cyber Security Full Course</p>
+                    <button style="margin-bottom: 20px;" onclick="window.open('https://www.youtube.com/embed/hXSFdwIOfnE', '_blank')">take course</button>
+                    <iframe width="853" height="480" src="https://www.youtube.com/embed/hXSFdwIOfnE" title="Cyber Security Full Course 2024 | Cyber Security Course Training For Beginners 2024 | Simplilearn" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                </div>
+                <div class="box">
+                    <img src="https://img.youtube.com/vi/UU4ZQF-X9jE/0.jpg" alt="Ultimate Candlestick Patterns Trading Course Thumbnail" style="width: 100%; height: auto; cursor: pointer;" onclick="window.open('https://www.youtube.com/embed/UU4ZQF-X9jE', '_blank')">
+                    <p style="margin-bottom: 100px;">Candlestick Patterns Trading Course</p>
+                    <button style="margin-bottom: 20px;" onclick="window.open('https://www.youtube.com/embed/UU4ZQF-X9jE', '_blank')">take course</button>
+                    <iframe width="853" height="480" src="https://www.youtube.com/embed/UU4ZQF-X9jE" title="Ultimate Candlestick Patterns Trading Course (PRO INSTANTLY)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                </div>
+                <div class="box">
+                    <img src="https://t4.ftcdn.net/jpg/00/65/87/55/360_F_65875517_gicOGvNvNORnx45GoASsh5jZNW54l3dI.jpg" alt="" style="width: 100%; height: auto; cursor: pointer;" onclick="window.open('https://t4.ftcdn.net/jpg/00/65/87/55/360_F_65875517_gicOGvNvNORnx45GoASsh5jZNW54l3dI.jpg', '_blank')">
+                    <p style="margin-bottom: 100px;">(COMING SOON)</p>
+                    <button style="margin-bottom: 20px;" onclick="window.open('https://www.youtube.com/embed/EerdGm-ehJQ', '_blank')">NOT AVAILABLE</button>
+                    
+                </div>
+                <div class="box">
+                    <img src="https://img.youtube.com/vi/XKHEtdqhLK8/0.jpg" alt="Python Full Course Thumbnail" style="width: 100%; height: auto; cursor: pointer;" onclick="window.open('https://www.youtube.com/embed/XKHEtdqhLK8', '_blank')">
+                    <p style="margin-bottom: 100px;">Python Full Course for free 🐍</p>
+                    <button style="margin-bottom: 20px;" onclick="window.open('https://www.youtube.com/embed/XKHEtdqhLK8', '_blank')">take course</button>
+                    <iframe width="853" height="480" src="https://www.youtube.com/embed/XKHEtdqhLK8" title="Python Full Course for free 🐍" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                </div>
+                <div class="box">
+                    <img src="https://img.youtube.com/vi/Tuw8hxrFBH8/0.jpg" alt="Steve Jobs Speech Thumbnail" style="width: 100%; height: auto; cursor: pointer;" onclick="window.open('https://www.youtube.com/embed/Tuw8hxrFBH8', '_blank')">
+                    <p style="margin-bottom: 100px;">best motivation ever</p>
+                    <button style="margin-bottom: 20px;" onclick="window.open('https://www.youtube.com/embed/Tuw8hxrFBH8', '_blank')">watch this!!!</button>
+                    <iframe width="853" height="480" src="https://www.youtube.com/embed/Tuw8hxrFBH8" title="One of the Greatest Speeches Ever | Steve Jobs" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                </div>
+                <div class="box">
+                    <img src="https://img.youtube.com/vi/uAslIcyd29M/0.jpg" alt="E-Commerce Website Tutorial Thumbnail" style="width: 100%; height: auto; cursor: pointer;" onclick="window.open('https://www.youtube.com/embed/uAslIcyd29M', '_blank')">
+                    <p style="margin-bottom: 100px;">How to Make an E-Commerce Website without coding</p>
+                    <button style="margin-bottom: 20px;" onclick="window.open('https://www.youtube.com/embed/uAslIcyd29M', '_blank')">take course</button>
+                    <iframe width="853" height="480" src="https://www.youtube.com/embed/uAslIcyd29M?list=PLM0HAJP9endAs2xn5pr0iLYVcwhN3M6kR" title="How to Make an E-Commerce Website in India - Build an Online Store" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                </div>
+                <div class="box">
+                    <img src="https://img.youtube.com/vi/AmGSEH7QcDg/0.jpg" alt="Unity Tutorial Thumbnail" style="width: 100%; height: auto; cursor: pointer;" onclick="window.open('https://www.youtube.com/embed/AmGSEH7QcDg', '_blank')">
+                    <p style="margin-bottom: 100px;">Learn Unity full course</p>
+                    <button style="margin-bottom: 20px;" onclick="window.open('https://www.youtube.com/embed/AmGSEH7QcDg', '_blank')">take course</button>
+                    <iframe width="853" height="480" src="https://www.youtube.com/embed/AmGSEH7QcDg" title="Learn Unity Beginner/Intermediate 2024 (FREE COMPLETE Course - Unity Tutorial)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                </div>
+                <div class="box">
+                    <img src="https://img.youtube.com/vi/fNzpcB7ODxQ/0.jpg" alt="Ethical Hacking in 12 Hours - Full Course - Learn to Hack! Thumbnail" style="width: 100%; height: auto; cursor: pointer;" onclick="window.open('https://www.youtube.com/embed/fNzpcB7ODxQ', '_blank')">
+                    <p style="margin-bottom: 100px;">Ethical Hacking in 12 Hours - Full Course - Learn to Hack!</p>
+                    <button style="margin-bottom: 20px;" onclick="window.open('https://www.youtube.com/embed/fNzpcB7ODxQ', '_blank')">take course</button>
+                    <iframe width="853" height="480" src="https://www.youtube.com/embed/fNzpcB7ODxQ" title="Ethical Hacking in 12 Hours - Full Course - Learn to Hack!" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                </div>
+                <div class="box">
+                    <img src="https://t4.ftcdn.net/jpg/00/65/87/55/360_F_65875517_gicOGvNvNORnx45GoASsh5jZNW54l3dI.jpg" alt="COMING" style="width: 100%; height: auto; cursor: pointer;" onclick="window.open('https://t4.ftcdn.net/jpg/00/65/87/55/360_F_65875517_gicOGvNvNORnx45GoASsh5jZNW54l3dI.jpg', '_blank')">
+                    <p style="margin-bottom: 100px;">(COMING SOON)</p>
+                    <button style="margin-bottom: 20px;" onclick="window.open('https://www.youtube.com/embed/G3e-cpL7ofc', '_blank')">NOT AVAILABLE</button>
+                    
+                </div>
+                <div class="box">
+                    <img src="https://img.youtube.com/vi/-TkoO8Z07hI/0.jpg" alt="C++ Full Course for free Thumbnail" style="width: 100%; height: auto; cursor: pointer;" onclick="window.open('https://www.youtube.com/embed/-TkoO8Z07hI', '_blank')">
+                    <p style="margin-bottom: 100px;">C++ Full Course ⚡️</p>
+                    <button style="margin-bottom: 20px;" onclick="window.open('https://www.youtube.com/embed/-TkoO8Z07hI', '_blank')">take course</button>
+                    <iframe width="853" height="480" src="https://www.youtube.com/embed/-TkoO8Z07hI" title="C++ Full Course for free ⚡️" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                </div>
+                <div class="box">
+                    <img src="https://img.youtube.com/vi/HfACrKJ_Y2w/0.jpg" alt="Calculus 1 - Full College Course Thumbnail" style="width: 100%; height: auto; cursor: pointer;" onclick="window.open('https://www.youtube.com/embed/HfACrKJ_Y2w', '_blank')">
+                    <p style="margin-bottom: 100px;">Calculus 1 - Full College Course</p>
+                    <button style="margin-bottom: 20px;" onclick="window.open('https://www.youtube.com/embed/HfACrKJ_Y2w', '_blank')">take course</button>
+                    <iframe width="640" height="480" src="https://www.youtube.com/embed/HfACrKJ_Y2w" title="Calculus 1 - Full College Course" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                </div>
+                <div class="box">
+                    <img src="https://img.youtube.com/vi/grnP3mduZkM/0.jpg" alt="Algebra Introduction Thumbnail" style="width: 100%; height: auto; cursor: pointer;" onclick="window.open('https://www.youtube.com/embed/grnP3mduZkM', '_blank')">
+                    <p style="margin-bottom: 100px;">Algebra Introduction - Basic Overview - </p>
+                    <button style="margin-bottom: 20px;" onclick="window.open('https://www.youtube.com/embed/grnP3mduZkM', '_blank')">take course</button>
+                    <iframe width="853" height="480" src="https://www.youtube.com/embed/grnP3mduZkM" title="Algebra Introduction - Basic Overview - Online Crash Course Review Video Tutorial Lessons" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                </div>
+                <div class="box">
+                    <img src="https://img.youtube.com/vi/s2f8LxY0Ekg/0.jpg" alt="The Key to Wealth and Success Thumbnail" style="width: 100%; height: auto; cursor: pointer;" onclick="window.open('https://www.youtube.com/embed/s2f8LxY0Ekg', '_blank')">
+                    <p style="margin-bottom: 100px;">The Key to Wealth and Success</p>
+                    <button style="margin-bottom: 20px;" onclick="window.open('https://www.youtube.com/embed/s2f8LxY0Ekg', '_blank')">watch course</button>
+                    <iframe width="853" height="480" src="https://www.youtube.com/embed/s2f8LxY0Ekg" title="The Key to Wealth and Success | Andrew Tate Motivation" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                </div>
+                <div class="box">
+                    <img src="https://img.youtube.com/vi/hGcH2WUMODw/0.jpg" alt="Andrew Tate Reveals How to Sell Anything to Anyone Thumbnail" style="width: 100%; height: auto; cursor: pointer;" onclick="window.open('https://www.youtube.com/embed/hGcH2WUMODw', '_blank')">
+                    <p style="margin-bottom: 100px;">How to Sell Anything to Anyone</p>
+                    <button style="margin-bottom: 20px;" onclick="window.open('https://www.youtube.com/embed/hGcH2WUMODw', '_blank')">watch!!!</button>
+                    <iframe width="853" height="480" src="https://www.youtube.com/embed/hGcH2WUMODw" title="Andrew Tate Reveals How to Sell Anything to Anyone" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                </div>
+                <div class="box">
+                    <img src="https://img.youtube.com/vi/DYg2jT9aUG4/0.jpg" alt="Financial Accounting in simple English Thumbnail" style="width: 100%; height: auto; cursor: pointer;" onclick="window.open('https://www.youtube.com/embed/DYg2jT9aUG4', '_blank')">
+                    <p style="margin-bottom: 100px;">Financial Accounting in simple English,course.</p>
+                    <button style="margin-bottom: 20px;" onclick="window.open('https://www.youtube.com/embed/DYg2jT9aUG4', '_blank')">take course</button>
+                    <iframe width="853" height="480" src="https://www.youtube.com/embed/DYg2jT9aUG4" title="Financial Accounting in simple English, All Accounting topics covered." frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                </div>
+            </div>
+        </section>
+
+        <!-- Music Section -->
+        <section id="music-section" class="section uncopiable">
+            <h1>Best Music</h1>
+            <div class="container">
+                <!-- 16 boxes for Music -->
+                <div class="box">
+                    <img src="https://img.youtube.com/vi/civgUOommC8/0.jpg" alt="YouTube Video Thumbnail" style="width: 100%; height: auto; cursor: pointer;" onclick="window.open('https://www.youtube.com/watch?v=xLc6lwbJoxU', '_blank')">
+                    <p style="margin-bottom: 100px;">Document 1 Description</p>
+                    <button style="margin-bottom: 20px;" onclick="window.open('https://www.youtube.com/watch?v=civgUOommC8', '_blank')">play</button>
+                    <iframe width="853" height="480" src="https://www.youtube.com/embed/civgUOommC8" title="Beyoncé - SPIRIT (From Disney's &quot;The Lion King&quot; - Official Video)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+                
+                <div class="box">
+                    <img src="https://img.youtube.com/vi/sZrTJesvJeo/0.jpg" alt="YouTube Video Thumbnail">
+                    <p style="margin-bottom: 100px;">Document 2 Description</p>
+                    <button style="margin-bottom: 20px;" onclick="window.open('https://www.youtube.com/watch?v=sZrTJesvJeo', '_blank')">play</button>
+                    <iframe width="853" height="480" src="https://www.youtube.com/embed/sZrTJesvJeo" title="Adele - Skyfall (Lyrics)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+                
+                <div class="box">
+                    <img src="https://img.youtube.com/vi/oOi3oJmfz4o/0.jpg" alt="YouTube Video Thumbnail">
+                    <p style="margin-bottom: 100px;">Document 3 Description</p>
+                    <button style="margin-bottom: 20px;" onclick="window.open('https://www.youtube.com/watch?v=oOi3oJmfz4o', '_blank')">play</button>
+                    <iframe width="853" height="480" src="https://www.youtube.com/embed/oOi3oJmfz4o" title="Egzod & Maestro Chives - Royalty (Lyrics) ft. Neoni" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+                
+                <div class="box">
+                    <img src="https://img.youtube.com/vi/0KSOMA3QBU0/0.jpg" alt="YouTube Video Thumbnail">
+                    <p style="margin-bottom: 100px;">Document 4 Description</p>
+                    <button style="margin-bottom: 20px;" onclick="window.open('https://www.youtube.com/watch?v=0KSOMA3QBU0', '_blank')">play</button>
+                    <iframe width="853" height="480" src="https://www.youtube.com/embed/0KSOMA3QBU0" title="Katy Perry - Dark Horse ft. Juicy J" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+                
+                <div class="box">
+                    <img src="https://img.youtube.com/vi/RgKAFK5djSk/0.jpg" alt="YouTube Video Thumbnail">
+                    <p style="margin-bottom: 100px;">Document 5 Description</p>
+                    <button style="margin-bottom: 20px;" onclick="window.open('https://www.youtube.com/watch?v=RgKAFK5djSk', '_blank')">play</button>
+                    <iframe width="853" height="480" src="https://www.youtube.com/embed/RgKAFK5djSk" title="Wiz Khalifa - See You Again ft. Charlie Puth [Official Video] Furious 7 Soundtrack" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+                
+                <div class="box">
+                    <img src="https://img.youtube.com/vi/r64_50ELf58/0.jpg" alt="YouTube Video Thumbnail">
+                    <p style="margin-bottom: 100px;">Document 6 Description</p>
+                    <button style="margin-bottom: 20px;" onclick="window.open('https://www.youtube.com/watch?v=r64_50ELf58', '_blank')">play</button>
+                    <iframe width="853" height="480" src="https://www.youtube.com/embed/r64_50ELf58" title="Nasty C - SMA (Vol. 1) ft. Rowlene" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+                
+                <div class="box">
+                    <img src="https://img.youtube.com/vi/jJdlgKzVsnI/0.jpg" alt="YouTube Video Thumbnail">
+                    <p style="margin-bottom: 100px;">Document 7 Description</p>
+                    <button style="margin-bottom: 20px;" onclick="window.open('https://www.youtube.com/watch?v=jJdlgKzVsnI', '_blank')">play</button>
+                    <iframe width="853" height="480" src="https://www.youtube.com/embed/jJdlgKzVsnI" title="Doja Cat - Streets (Official Video)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+                
+                <div class="box">
+                    <img src="https://img.youtube.com/vi/pfxyk1glEq4/0.jpg" alt="YouTube Video Thumbnail">
+                    <p style="margin-bottom: 100px;">Document 8 Description</p>
+                    <button style="margin-bottom: 20px;" onclick="window.open('https://www.youtube.com/watch?v=pfxyk1glEq4', '_blank')">play</button>
+                    <iframe width="758" height="480" src="https://www.youtube.com/embed/pfxyk1glEq4" title="Chris Brown - Under The Influence (Official Video)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+                
+                <div class="box">
+                    <img src="https://img.youtube.com/vi/x3bfa3DZ8JM/0.jpg" alt="YouTube Video Thumbnail">
+                    <p style="margin-bottom: 100px;">Document 9 Description</p>
+                    <button style="margin-bottom: 20px;" onclick="window.open('https://www.youtube.com/watch?v=x3bfa3DZ8JM', '_blank')">play</button>
+                    <iframe width="853" height="480" src="https://www.youtube.com/embed/x3bfa3DZ8JM" title="Khalid - Better (Official Video)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+                
+                <div class="box">
+                    <img src="https://img.youtube.com/vi/8dM5QYdTo08/0.jpg" alt="YouTube Video Thumbnail">
+                    <p style="margin-bottom: 100px;">Document 10 Description</p>
+                    <button style="margin-bottom: 20px;" onclick="window.open('https://www.youtube.com/watch?v=8dM5QYdTo08', '_blank')">play</button>
+                    <iframe width="853" height="480" src="https://www.youtube.com/embed/8dM5QYdTo08" title="Miguel - Adorn (Official Video)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+                
+                <div class="box">
+                    <img src="https://img.youtube.com/vi/W16bk86xIY0/0.jpg" alt="YouTube Video Thumbnail">
+                    <p style="margin-bottom: 100px;">Document 11 Description</p>
+                    <button style="margin-bottom: 20px;" onclick="window.open('https://www.youtube.com/watch?v=W16bk86xIY0', '_blank')">play</button>
+                    <iframe width="853" height="480" src="https://www.youtube.com/embed/W16bk86xIY0" title="Ella Mai - Trip" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+                
+                <div class="box">
+                    <img src="https://img.youtube.com/vi/k6M5C-oKw9k/0.jpg" alt="YouTube Video Thumbnail">
+                    <p style="margin-bottom: 100px;">Document 12 Description</p>
+                    <button style="margin-bottom: 20px;" onclick="window.open('https://www.youtube.com/watch?v=k6M5C-oKw9k', '_blank')">play</button>
+                    <iframe width="853" height="480" src="https://www.youtube.com/embed/k6M5C-oKw9k" title="Lil Nas X - Old Town Road (Official Video) ft. Billy Ray Cyrus" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+                
+                <div class="box">
+                    <img src="https://img.youtube.com/vi/bnVUHWCynig/0.jpg" alt="YouTube Video Thumbnail" style="width: 100%; height: auto; cursor: pointer;" onclick="window.open('https://www.youtube.com/watch?v=bnVUHWCynig', '_blank')">
+                    <p style="margin-bottom: 100px;">Document 13 Description</p>
+                    <button style="margin-bottom: 20px;" onclick="window.open('https://www.youtube.com/watch?v=bnVUHWCynig', '_blank')">Play</button>
+                    <iframe width="875" height="373" src="https://www.youtube.com/embed/bnVUHWCynig" title="Beyoncé - Halo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                </div>
+                
+                <div class="box">
+                    <img src="https://img.youtube.com/vi/-FyjEnoIgTM/0.jpg" alt="YouTube Video Thumbnail" style="width: 100%; height: auto; cursor: pointer;" onclick="window.open('https://www.youtube.com/watch?v=-FyjEnoIgTM', '_blank')">
+                    <p style="margin-bottom: 100px;">Document 14 Description</p>
+                    <button style="margin-bottom: 20px;" onclick="window.open('https://www.youtube.com/watch?v=-FyjEnoIgTM', '_blank')">Play</button>
+                    <iframe width="853" height="480" src="https://www.youtube.com/embed/-FyjEnoIgTM" title="Bruno Mars - Versace on the Floor (Official Music Video)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                </div>
+                
+                <div class="box">
+                    <img src="https://img.youtube.com/vi/fLexgOxsZu0/0.jpg" alt="YouTube Video Thumbnail">
+                    <p style="margin-bottom: 100px;">Document 15 Description</p>
+                    <button style="margin-bottom: 20px;" onclick="window.open('https://www.youtube.com/watch?v=fLexgOxsZu0', '_blank')">play</button>
+                    <iframe width="853" height="480" src="https://www.youtube.com/embed/fLexgOxsZu0" title="Bruno Mars - 24K Magic (Official Video)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+                
+                <div class="box">
+                    <img src="https://img.youtube.com/vi/UXa_V1UD9S8/0.jpg" alt="YouTube Video Thumbnail" style="width: 100%; height: auto; cursor: pointer;" onclick="window.open('https://www.youtube.com/watch?v=UXa_V1UD9S8', '_blank')">
+                    <p style="margin-bottom: 100px;">Document 16 Description</p>
+                    <button style="margin-bottom: 20px;" onclick="window.open('https://www.youtube.com/watch?v=UXa_V1UD9S8', '_blank')">Play</button>
+                    <iframe width="853" height="480" src="https://www.youtube.com/embed/UXa_V1UD9S8" title="Megan Thee Stallion, Yuki Chiba - Mamushi (Lyrics) Okane kasegu, orera wa sutaa" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                </div>   
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <ul class="social-icons">
+            <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+            <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+            <li><a href="#"><i class="fab fa-instagram"></i></a></li>
+            <li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
+        </ul>
+        <div class="links">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Contact Us</a>
+        </div>
+        <p class="copyright">© 2024 Your Website. All Rights Reserved.</p>
+    </footer>
+
+    <!-- JavaScript -->
+
+    <script>
+        // Load the saved dark mode preference on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            if (localStorage.getItem('darkMode') === 'enabled') {
+                document.body.classList.add('dark-mode');
+            }
+        });
+    
+        function toggleBackground() {
+            // Toggle the dark mode class
+            document.body.classList.toggle('dark-mode');
+    
+            // Save the preference to localStorage
+            if (document.body.classList.contains('dark-mode')) {
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        }
+    
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+        }
+    
+        function searchPDFs() {
+            const searchInput = document.getElementById('search-input').value.toLowerCase();
+            const pdfBoxes = document.querySelectorAll('#pdf-container .box');
+    
+            pdfBoxes.forEach(box => {
+                const text = box.innerText.toLowerCase();
+                box.style.display = text.includes(searchInput) ? 'block' : 'none';
+            });
+        }
+    </script>
+    
+</body>
+</html>
